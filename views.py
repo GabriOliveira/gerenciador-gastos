@@ -8,7 +8,6 @@ def homepage():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM Mes")
-    tudo_mes = cursor.fetchall()
     cursor.close()
     conn.close()
     return render_template("home.html")
