@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gerenciador de Gastos</title>
 </head>
 <body>
     
-    <form action="/cadastro-gastos" method="get">
+    <form action="/cadastro" method="GET">
         <h1>GASTO</h1>
         <input type="text" name="nome_gasto" placeholder="Nome do Gasto">
         <input type="text" name="valor_gasto" placeholder="Valor do Gasto">
         <input type="text" name="nome_mes" placeholder="Nome do mes">
+        <input type="text" name="salario" placeholder="Valor do salario">
         <button type="submit">Enviar</button>
         <a href="/deletar-gastos" class="btn">Limpar gastos</a>
     </form>

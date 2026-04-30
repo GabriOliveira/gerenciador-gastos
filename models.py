@@ -5,12 +5,14 @@ cursor = conn.cursor()
 
 cursor.execute("""CREATE TABLE IF NOT EXISTS Mes (
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            nome_mes TEXT NOT NULL UNIQUE
+            nome_mes TEXT NOT NULL UNIQUE,
+            salario FLOAT
                )""")
 cursor.execute("""CREATE TABLE IF NOT EXISTS Gasto (
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             nome_gasto TEXT NOT NULL,
-            valor_gasto FLOAT NOT NULL
+            valor_gasto FLOAT NOT NULL,
+            mes TEXT NOT NULL
                )""")
 
 conn.commit()

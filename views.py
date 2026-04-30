@@ -11,21 +11,60 @@ def homepage():
     tudo_mes = cursor.fetchall()
     cursor.close()
     conn.close()
-    return render_template("home.html", meses=tudo_mes) # enviando para o html, como reecebo no html?.
+    return render_template("home.html")
 
-@app.route("/cadastro-gastos", methods=['GET']) 
+@app.route("/cadastro", methods=['GET']) 
 def cadastrogastos():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
-    
-    cursor.execute("SELECT * FROM Gasto")
-    nome_gasto = request.args.get('nome_gasto')
+
+    #Insere os meses em por meio de uma lista de tuplas
+    meses_fixos = [
+        ('Janeiro',),
+        ( 'Fevereiro',),
+        ( 'Março',),
+         ('Abril',),
+         ('Maio',),
+         ('Junho',),
+         ('Julho',),
+        ( 'Agosto',),
+         ('Setembro',),
+         ('Outubro',),
+        ( 'Novembro',),
+         ('Dezembro',)
+    ]
+    cursor.executemany(''' INSERT OR IGNORE INTO Mes (nome_mes)VALUES(?)''',(meses_fixos))
+    conn.commit()
+
+    #Obtem dados digitados pelo usuario e armazena em variaveis
+    nome_mes =  request.args.get('nome_mes')#.lower
+    salario = request.args.get('salario')
+
+    nome_gasto = request.args.get('nome_gasto')#.lower
     valor_gasto = request.args.get('valor_gasto')
 
-    cursor.execute(''' INSERT INTO Gasto (nome_gasto,valor_gasto)VALUES(?,?)''',(nome_gasto,valor_gasto))
-    conn.commit()
+    #Obtem todos valores nome_mes cadastrados no BD
+    cursor.execute('''SELECT nome_mes FROM Mes''')
+    meses_cadastrados = cursor.fetchall()
+    
+    #Percorre cada valor dos valores anteriores obtidos e executa o IF
+    for meses in meses_cadastrados:
+        if meses[0] == nome_mes:
+            cursor.execute(
+            "INSERT INTO Gasto (nome_gasto, valor_gasto, mes) VALUES (?, ?, (SELECT nome_mes FROM Mes WHERE nome_mes = ?))",
+            (nome_gasto, valor_gasto, nome_mes)
+        )
+            conn.commit()
+
+            cursor.execute(
+            "UPDATE Mes SET salario = ? WHERE nome_mes = ?",
+            (salario, nome_mes)
+        )
+            conn.commit()    
+            return redirect(url_for('homepage')) 
+    #caso nao entre na condição, o contador é fechado e o usuário é direcionado a uma tela de erro
     conn.close()
-    return redirect(url_for('homepage')) 
+    return render_template('erro.html')
 
 @app.route("/alterar-salario")
 def alterarsalario():
@@ -34,8 +73,6 @@ def alterarsalario():
     cursor.close()
     conn.close()
     return "alterar salario"
-
-
 
 @app.route("/ver-gastos") 
 def vergastos():
