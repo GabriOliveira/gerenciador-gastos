@@ -7,33 +7,19 @@ from flask import render_template, request, redirect, url_for
 def homepage():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Mes")
+    cursor.execute("SELECT nome_mes FROM Mes ORDER BY id")
+    tabela_mes = cursor.fetchall()
+    cursor.execute("SELECT salario FROM Mes  ORDER BY id")
+    tabela_salario = cursor.fetchall()
+
     cursor.close()
     conn.close()
-    return render_template("home.html")
+    return render_template("home.html", tabela_mes = tabela_mes, tabela_salario = tabela_salario)
 
 @app.route("/cadastro", methods=['GET']) 
 def cadastrogastos():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
-
-    #Insere os meses em por meio de uma lista de tuplas
-    meses_fixos = [
-        ('Janeiro',),
-        ( 'Fevereiro',),
-        ( 'Março',),
-         ('Abril',),
-         ('Maio',),
-         ('Junho',),
-         ('Julho',),
-        ( 'Agosto',),
-         ('Setembro',),
-         ('Outubro',),
-        ( 'Novembro',),
-         ('Dezembro',)
-    ]
-    cursor.executemany(''' INSERT OR IGNORE INTO Mes (nome_mes)VALUES(?)''',(meses_fixos))
-    conn.commit()
 
     #Obtem dados digitados pelo usuario e armazena em variaveis
     nome_mes =  request.args.get('nome_mes')#.lower

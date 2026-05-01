@@ -9,16 +9,30 @@
     
     <form action="/cadastro" method="GET">
         <h1>GASTO</h1>
-        <input type="text" name="nome_gasto" placeholder="Nome do Gasto">
-        <input type="text" name="valor_gasto" placeholder="Valor do Gasto">
-        <input type="text" name="nome_mes" placeholder="Nome do mes">
-        <input type="text" name="salario" placeholder="Valor do salario">
-        <button type="submit">Enviar</button>
-        <a href="/deletar-gastos" class="btn">Limpar gastos</a>
+        <input type="text" name="nome_gasto" class="ipt" placeholder="Nome do Gasto">
+        <input type="text" name="valor_gasto" class="ipt" placeholder="Valor do Gasto">
+        <input type="text" name="nome_mes" class="ipt" placeholder="Nome do mes">
+        <input type="text" name="salario" class="ipt" placeholder="Valor do salario">
+        <button type="submit" class="btn">Enviar</button>
+        <button type="button" class="btn"><a href="/deletar-gastos" >Limpar gastos</a></button>
+        <button type="button" class="btn"><a href="/deletar-um-gasto" >Deletar um Gasto</a></button>
     </form>
-    <table>
-        <tr><th></th></tr>
-
+    <table border=1>
+        <tr><th>TABELA MÊS</th></tr>
+        <tr><!--CRIA UMA LINHA NA TABELA-->
+            {% for mes in tabela_mes  %}
+                <th>
+                    {{ mes | map('default', '') | map('string') | join(', ') }}
+                </th><!--CABEÇALHO DAS COLUNAS-->
+            {% endfor %}
+        </tr>
+        <tr>
+            {%for salario in tabela_salario%}
+            <td>
+                {{ salario| map('default', '') | map('string') | join(', ') }}
+            </td><!--CELULA DAS COLUNAS-->
+            {%endfor%}
+        </tr>
     </table>
 </body>
 </html>
