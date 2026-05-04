@@ -11,18 +11,25 @@
         <h1>GASTO</h1>
         <input type="text" name="nome_gasto" class="ipt" placeholder="Nome do Gasto">
         <input type="text" name="valor_gasto" class="ipt" placeholder="Valor do Gasto">
-        <input type="text" name="nome_mes" class="ipt" placeholder="Nome do mes">
+        <input type="text" name="nome_mes" class="ipt" placeholder="Nome do mes" >
         <input type="text" name="salario" class="ipt" placeholder="Valor do salario">
-        <button type="submit" class="btn">Enviar</button>
+        <button type="submit" class="btn">Enviar Salario do mes</button>
+        <button type="submit" class="btn">Enviar Gasto do mes</button>
+
         <button type="button" class="btn"><a href="/deletar-gastos" >Limpar gastos</a></button>
+        <button type="button" class="btn"><a href="/deletar-salarios" >Limpar salários</a></button>
         <button type="button" class="btn"><a href="/deletar-um-gasto" >Deletar um Gasto</a></button>
+        <button type="button" class="btn"><a href="/deletar-um-salario" >Deletar um Gasto</a></button>
+
+        <button type="button" class="btn"><a href="/ver-gastos" >ver</a></button>
+
     </form>
     <table border=1>
-        <tr><th>TABELA MÊS</th></tr>
+        <tr><th>QUANTO GUARDAR CADA MÊS 30%</th></tr>
         <tr><!--CRIA UMA LINHA NA TABELA-->
             {% for mes in tabela_mes  %}
                 <th>
-                    {{ mes | map('default', '') | map('string') | join(', ') }}
+                    {{ mes | map('default', '') | join(', ') }}
                 </th><!--CABEÇALHO DAS COLUNAS-->
             {% endfor %}
         </tr>
@@ -32,6 +39,26 @@
                 {{ salario| map('default', '') | map('string') | join(', ') }}
             </td><!--CELULA DAS COLUNAS-->
             {%endfor%}
+        </tr>
+    </table>
+    <table border=1>
+        <tr><th>TOTAL DE CADA DIVIDA</th></tr>
+        <tr><th>nome divida</th></tr>
+        <tr><td>total</td></tr>
+    </table>
+
+    <table border=1>
+        <tr><th> TOTAL DIVIDAS POR MES</th></tr>
+         <tr><!--CRIA UMA LINHA NA TABELA-->
+            {% for mes in tabela_mes  %}
+                <th>
+                    {{ mes | map('default', '') | join(', ') }}
+                </th><!--CABEÇALHO DAS COLUNAS-->
+            {% endfor %}
+        </tr>
+
+        <tr>
+            <td>total</td>
         </tr>
     </table>
 </body>

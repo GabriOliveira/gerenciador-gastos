@@ -22,10 +22,14 @@ def cadastrogastos():
     cursor = conn.cursor()
 
     #Obtem dados digitados pelo usuario e armazena em variaveis
-    nome_mes =  request.args.get('nome_mes')#.lower
+    nome_mes =  request.args.get('nome_mes')
     salario = request.args.get('salario')
+    if salario == None :
+        salario = ' '
+    else:
+        salario = float(salario) * 0.3
 
-    nome_gasto = request.args.get('nome_gasto')#.lower
+    nome_gasto = request.args.get('nome_gasto')
     valor_gasto = request.args.get('valor_gasto')
 
     #Obtem todos valores nome_mes cadastrados no BD
@@ -51,28 +55,35 @@ def cadastrogastos():
     conn.close()
     return render_template('erro.html')
 
-@app.route("/alterar-salario")
-def alterarsalario():
-    conn = sql.connect("banco.db")
-    cursor = conn.cursor()
-    cursor.close()
-    conn.close()
-    return "alterar salario"
-
 @app.route("/ver-gastos") 
 def vergastos():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
+    cursor.execute('SELECT nome_gasto FROM Gasto')
+    todos = cursor.fetchall()
+    print(todos)
+    conn.commit()
     cursor.close()
     conn.close()
     return "ver gastos"
 
 @app.route('/deletar-gastos')
-def deletar():
+def deletargastos():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
     cursor.execute("DELETE FROM Gasto")
     cursor.execute("DELETE FROM sqlite_sequence WHERE name='Gasto'")
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect(url_for('homepage')) 
+@app.route('/deletar-salarios')
+def deletarsalarios():
+    conn = sql.connect("banco.db")
+    cursor = conn.cursor()
+    cursor.execute("UPDATE Mes SET salario = NULL")
+    conn.commit()
+    cursor.execute("DELETE FROM sqlite_sequence WHERE name='Mes'")
     conn.commit()
     cursor.close()
     conn.close()
