@@ -6,59 +6,90 @@
     <title>Gerenciador de Gastos</title>
 </head>
 <body>
-    
-    <form action="/cadastro" method="GET">
-        <h1>GASTO</h1>
+    <h1>Gerenciador de Gastos</h1>
+    <form action="/cadastro-gasto" method="POST">
         <input type="text" name="nome_gasto" class="ipt" placeholder="Nome do Gasto">
         <input type="text" name="valor_gasto" class="ipt" placeholder="Valor do Gasto">
-        <input type="text" name="nome_mes" class="ipt" placeholder="Nome do mes" >
-        <input type="text" name="salario" class="ipt" placeholder="Valor do salario">
-        <button type="submit" class="btn">Enviar Salario do mes</button>
+    <select name="nome_mes_gasto" id="meses">
+            <option value="Janeiro">Janeiro</option>
+            <option value="Fevereiro">Fevereiro</option>
+            <option value="Março">Março</option>
+            <option value="Abril">Abril</option>
+            <option value="Maio">Maio</option>
+            <option value="Junho">Junho</option>
+            <option value="Julho">Julho</option>
+            <option value="Agosto">Agosto</option>
+            <option value="Setembro">Setembro</option>
+            <option value="Outubro">Outubro</option>
+            <option value="Novembro">Novembro</option>
+            <option value="Dezembro">Dezembro</option>
+        </select>        
         <button type="submit" class="btn">Enviar Gasto do mes</button>
 
-        <button type="button" class="btn"><a href="/deletar-gastos" >Limpar gastos</a></button>
-        <button type="button" class="btn"><a href="/deletar-salarios" >Limpar salários</a></button>
-        <button type="button" class="btn"><a href="/deletar-um-gasto" >Deletar um Gasto</a></button>
-        <button type="button" class="btn"><a href="/deletar-um-salario" >Deletar um Gasto</a></button>
 
-        <button type="button" class="btn"><a href="/ver-gastos" >ver</a></button>
+        
+        <button type="button" class="btn"><a href="/deletar-gastos" >Limpar gastos</a></button>
+        <button type="button" class="btn"><a href="/deletar-um-gasto" >Deletar um Gasto</a></button>
 
     </form>
+
+    <form action="/cadastro-salario" method="POST">
+        <select name="nome_mes_salario" id="meses">
+            <option value="Janeiro">Janeiro</option>
+            <option value="Fevereiro">Fevereiro</option>
+            <option value="Março">Março</option>
+            <option value="Abril">Abril</option>
+            <option value="Maio">Maio</option>
+            <option value="Junho">Junho</option>
+            <option value="Julho">Julho</option>
+            <option value="Agosto">Agosto</option>
+            <option value="Setembro">Setembro</option>
+            <option value="Outubro">Outubro</option>
+            <option value="Novembro">Novembro</option>
+            <option value="Dezembro">Dezembro</option>
+        </select>
+        <input type="text" name="salario" class="ipt" placeholder="Valor do salario" value= 0 >
+        <button type="submit" class="btn">Enviar Salario do mes</button>
+        <button type="button" class="btn"><a href="/deletar-salarios" >Limpar salarios</a></button>
+        <button type="button" class="btn"><a href="/deletar-um-salario" >Deletar um salario</a></button>
+        
+
+    </form>
+    
+<!--tabelas totais(por divida nome, por mes)-->
     <table border=1>
-        <tr><th>QUANTO GUARDAR CADA MÊS 30%</th></tr>
-        <tr><!--CRIA UMA LINHA NA TABELA-->
-            {% for mes in tabela_mes  %}
-                <th>
-                    {{ mes | map('default', '') | join(', ') }}
-                </th><!--CABEÇALHO DAS COLUNAS-->
-            {% endfor %}
-        </tr>
-        <tr>
-            {%for salario in tabela_salario%}
-            <td>
-                {{ salario| map('default', '') | map('string') | join(', ') }}
-            </td><!--CELULA DAS COLUNAS-->
+        <tr><th>TOTAL DIVIDAS POR MES</th></tr>
+        <tr><th>
+            
+        </th></tr>
+        <tr>{%for mes, total in gastos_somados_mes%}
+            <tr><th>{{mes}}</th>
+            <td>{{total}}</td>
+            </tr>
             {%endfor%}
         </tr>
     </table>
-    <table border=1>
-        <tr><th>TOTAL DE CADA DIVIDA</th></tr>
-        <tr><th>nome divida</th></tr>
-        <tr><td>total</td></tr>
-    </table>
 
     <table border=1>
-        <tr><th> TOTAL DIVIDAS POR MES</th></tr>
+        <tr><th> TOTAL DIVIDAS POR NOME DIVIDA</th></tr>
          <tr><!--CRIA UMA LINHA NA TABELA-->
-            {% for mes in tabela_mes  %}
-                <th>
-                    {{ mes | map('default', '') | join(', ') }}
-                </th><!--CABEÇALHO DAS COLUNAS-->
+            {% for nome_gasto, total in gastos_somados_nome_gasto%}
+                <tr><th>{{nome_gasto}}</th>
+                <td>{{total}}</td>
+                </tr>
             {% endfor %}
         </tr>
+    </table>
 
+<!--tabela de economia-->
+    <table border=1>
+        <tr><th>QUANTO GUARDAR CADA MÊS 30%</th></tr>
         <tr>
-            <td>total</td>
+            {% for mes, salario in campo_nome_mes_salario%}
+            <tr><th>{{mes}}</th>
+            <td>{{salario * 0.3}}</td>
+            </tr>
+            {% endfor %}
         </tr>
     </table>
 </body>

@@ -7,65 +7,64 @@ from flask import render_template, request, redirect, url_for
 def homepage():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT nome_mes FROM Mes ORDER BY id")
-    tabela_mes = cursor.fetchall()
-    cursor.execute("SELECT salario FROM Mes  ORDER BY id")
-    tabela_salario = cursor.fetchall()
-
+    cursor.execute("SELECT nome_mes, COALESCE(salario, 0) FROM Mes ORDER BY id")
+    campo_nome_mes_salario = cursor.fetchall()
+    cursor.execute("SELECT mes, SUM(valor_gasto) FROM Gasto GROUP BY mes ORDER BY id")
+    gastos_somados_mes = cursor.fetchall()
+    cursor.execute("SELECT nome_gasto, SUM(valor_gasto) FROM Gasto GROUP BY nome_gasto ORDER BY id")
+    gastos_somados_nome_gasto = cursor.fetchall()
     cursor.close()
     conn.close()
-    return render_template("home.html", tabela_mes = tabela_mes, tabela_salario = tabela_salario)
+    return render_template("home.html", campo_nome_mes_salario = campo_nome_mes_salario, gastos_somados_mes = gastos_somados_mes, gastos_somados_nome_gasto = gastos_somados_nome_gasto)
 
-@app.route("/cadastro", methods=['GET']) 
+#PARTE DO MES(SALARIO)
+@app.route('/cadastro-salario', methods=['POST'])
+def cadastrosalario():
+    conn = sql.connect("banco.db")
+    cursor = conn.cursor()
+    nome_mes = request.form['nome_mes_salario']
+    salario = request.form['salario']
+    if salario == None or "" or " " :
+        return render_template("erro.html")
+    cursor.execute(
+            "UPDATE Mes SET salario = ? WHERE nome_mes = ?",
+            (salario, nome_mes)
+        )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect(url_for('homepage')) 
+
+#PARTE DOS GASTOS
+@app.route("/cadastro-gasto", methods=['POST']) 
 def cadastrogastos():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
 
     #Obtem dados digitados pelo usuario e armazena em variaveis
-    nome_mes =  request.args.get('nome_mes')
-    salario = request.args.get('salario')
-    if salario == None :
-        salario = ' '
-    else:
-        salario = float(salario) * 0.3
+    nome_mes =  request.form['nome_mes_gasto']
+    nome_gasto = request.form['nome_gasto']
+    valor_gasto = request.form['valor_gasto']
 
-    nome_gasto = request.args.get('nome_gasto')
-    valor_gasto = request.args.get('valor_gasto')
+    if nome_gasto and valor_gasto:
 
-    #Obtem todos valores nome_mes cadastrados no BD
-    cursor.execute('''SELECT nome_mes FROM Mes''')
-    meses_cadastrados = cursor.fetchall()
-    
-    #Percorre cada valor dos valores anteriores obtidos e executa o IF
-    for meses in meses_cadastrados:
-        if meses[0] == nome_mes:
-            cursor.execute(
-            "INSERT INTO Gasto (nome_gasto, valor_gasto, mes) VALUES (?, ?, (SELECT nome_mes FROM Mes WHERE nome_mes = ?))",
-            (nome_gasto, valor_gasto, nome_mes)
-        )
-            conn.commit()
-
-            cursor.execute(
-            "UPDATE Mes SET salario = ? WHERE nome_mes = ?",
-            (salario, nome_mes)
-        )
-            conn.commit()    
-            return redirect(url_for('homepage')) 
-    #caso nao entre na condição, o contador é fechado e o usuário é direcionado a uma tela de erro
-    conn.close()
+        #Obtem todos valores nome_mes cadastrados no BD
+        cursor.execute('''SELECT nome_mes FROM Mes''')
+        meses_cadastrados = cursor.fetchall()
+        
+        #Percorre cada valor dos valores anteriores obtidos e executa o IF
+        for meses in meses_cadastrados:
+            if meses[0] == nome_mes:
+                cursor.execute(
+                "INSERT INTO Gasto (nome_gasto, valor_gasto, mes) VALUES (?, ?, (SELECT nome_mes FROM Mes WHERE nome_mes = ?))",
+                (nome_gasto, valor_gasto, nome_mes)
+            )
+                conn.commit()
+                
+                return redirect(url_for('homepage')) 
+        #caso nao entre na condição, o contador é fechado e o usuário é direcionado a uma tela de erro
+        conn.close()
     return render_template('erro.html')
-
-@app.route("/ver-gastos") 
-def vergastos():
-    conn = sql.connect("banco.db")
-    cursor = conn.cursor()
-    cursor.execute('SELECT nome_gasto FROM Gasto')
-    todos = cursor.fetchall()
-    print(todos)
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return "ver gastos"
 
 @app.route('/deletar-gastos')
 def deletargastos():
@@ -77,6 +76,7 @@ def deletargastos():
     cursor.close()
     conn.close()
     return redirect(url_for('homepage')) 
+
 @app.route('/deletar-salarios')
 def deletarsalarios():
     conn = sql.connect("banco.db")
