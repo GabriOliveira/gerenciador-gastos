@@ -7,55 +7,10 @@
 </head>
 <body>
     <h1>Gerenciador de Gastos</h1>
-    <form action="/cadastro-gasto" method="POST">
-        <input type="text" name="nome_gasto" class="ipt" placeholder="Nome do Gasto">
-        <input type="text" name="valor_gasto" class="ipt" placeholder="Valor do Gasto">
-    <select name="nome_mes_gasto" id="meses">
-            <option value="Janeiro">Janeiro</option>
-            <option value="Fevereiro">Fevereiro</option>
-            <option value="Março">Março</option>
-            <option value="Abril">Abril</option>
-            <option value="Maio">Maio</option>
-            <option value="Junho">Junho</option>
-            <option value="Julho">Julho</option>
-            <option value="Agosto">Agosto</option>
-            <option value="Setembro">Setembro</option>
-            <option value="Outubro">Outubro</option>
-            <option value="Novembro">Novembro</option>
-            <option value="Dezembro">Dezembro</option>
-        </select>        
-        <button type="submit" class="btn">Enviar Gasto do mes</button>
-
-
-        
-        <button type="button" class="btn"><a href="/deletar-gastos" >Limpar gastos</a></button>
-        <button type="button" class="btn"><a href="/deletar-um-gasto" >Deletar um Gasto</a></button>
-
+    <form action="/" method="get">
+    <button type="submit" name="botao" value="salario">Cadastrar Salario</button>
+    <button type="submit" name="botao" value="gasto">Cadastrar Gasto</button>
     </form>
-
-    <form action="/cadastro-salario" method="POST">
-        <select name="nome_mes_salario" id="meses">
-            <option value="Janeiro">Janeiro</option>
-            <option value="Fevereiro">Fevereiro</option>
-            <option value="Março">Março</option>
-            <option value="Abril">Abril</option>
-            <option value="Maio">Maio</option>
-            <option value="Junho">Junho</option>
-            <option value="Julho">Julho</option>
-            <option value="Agosto">Agosto</option>
-            <option value="Setembro">Setembro</option>
-            <option value="Outubro">Outubro</option>
-            <option value="Novembro">Novembro</option>
-            <option value="Dezembro">Dezembro</option>
-        </select>
-        <input type="text" name="salario" class="ipt" placeholder="Valor do salario" value= 0 >
-        <button type="submit" class="btn">Enviar Salario do mes</button>
-        <button type="button" class="btn"><a href="/deletar-salarios" >Limpar salarios</a></button>
-        <button type="button" class="btn"><a href="/deletar-um-salario" >Deletar um salario</a></button>
-        
-
-    </form>
-    
 <!--tabelas totais(por divida nome, por mes)-->
     <table border=1>
         <tr><th>TOTAL DIVIDAS POR MES</th></tr>

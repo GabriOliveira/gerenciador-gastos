@@ -3,10 +3,17 @@ from main import app
 from models import *
 from flask import render_template, request, redirect, url_for
 
-@app.route("/") 
+@app.route("/", methods=["GET"]) 
 def homepage():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
+    
+    botao = request.args.get("botao")
+    if botao == "gasto":
+      return  render_template("cadastro-gasto.html")
+    elif botao == "salario":
+      return  render_template("cadastro-salario.html")
+    
     cursor.execute("SELECT nome_mes, COALESCE(salario, 0) FROM Mes ORDER BY id")
     campo_nome_mes_salario = cursor.fetchall()
     cursor.execute("SELECT mes, SUM(valor_gasto) FROM Gasto GROUP BY mes ORDER BY id")
@@ -22,14 +29,24 @@ def homepage():
 def cadastrosalario():
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
-    nome_mes = request.form['nome_mes_salario']
-    salario = request.form['salario']
-    if salario == None or "" or " " :
+    nome_mes = request.form.get('nome_mes_salario')
+    salario = request.form.get('salario')
+
+    if not salario or salario.strip() == "":
+         cursor.close()
+         conn.close()
+         return render_template("erro.html")
+    
+    try:
+        salario = float(salario)
+    except ValueError:
+        cursor.close()
+        conn.close()
         return render_template("erro.html")
+    
     cursor.execute(
             "UPDATE Mes SET salario = ? WHERE nome_mes = ?",
-            (salario, nome_mes)
-        )
+            (salario, nome_mes))
     conn.commit()
     cursor.close()
     conn.close()
@@ -79,6 +96,7 @@ def deletargastos():
 
 @app.route('/deletar-salarios')
 def deletarsalarios():
+
     conn = sql.connect("banco.db")
     cursor = conn.cursor()
     cursor.execute("UPDATE Mes SET salario = NULL")
@@ -88,3 +106,28 @@ def deletarsalarios():
     cursor.close()
     conn.close()
     return redirect(url_for('homepage')) 
+
+@app.route('/deletar-um-gasto', methods=['POST'])
+def deletargasto():
+    conn = sql.connect("banco.db")
+    cursor = conn.cursor()
+    nome_gasto = request.form["nome_gasto"]
+
+    if nome_gasto:
+        cursor.execute("DELETE FROM Gasto WHERE nome_gasto = ?", (nome_gasto,))
+        conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect(url_for('homepage')) 
+    
+@app.route('/deletar-um-salario')
+def deletarsalario():
+    conn = sql.connect("banco.db")
+    cursor = conn.cursor()
+    
+    
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    

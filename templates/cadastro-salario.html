@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de salario</title>
+</head>
+<body>
+    <h1>Cadastrar salario</h1>
+    <form action="/cadastro-salario" method="post">
+        <select name="nome_mes_salario" id="meses">
+            <option value="Janeiro">Janeiro</option>
+            <option value="Fevereiro">Fevereiro</option>
+            <option value="Março">Março</option>
+            <option value="Abril">Abril</option>
+            <option value="Maio">Maio</option>
+            <option value="Junho">Junho</option>
+            <option value="Julho">Julho</option>
+            <option value="Agosto">Agosto</option>
+            <option value="Setembro">Setembro</option>
+            <option value="Outubro">Outubro</option>
+            <option value="Novembro">Novembro</option>
+            <option value="Dezembro">Dezembro</option>
+        </select>
+        <input type="text" name="salario" class="ipt" placeholder="Valor do salario" value= 0 >
+        <button type="submit" class="btn">Enviar Salario do mes</button>
+        <button type="button" onclick="window.location.href='/'">Voltar</button>
+    </form>
+</body>
+</html>
