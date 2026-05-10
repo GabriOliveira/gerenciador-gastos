@@ -8,24 +8,23 @@
 <body>
     <h1>Gerenciador de Gastos</h1>
     <form action="/" method="get">
-    <button type="submit" name="botao" value="salario">Cadastrar Salario</button>
-    <button type="submit" name="botao" value="gasto">Cadastrar Gasto</button>
+    <button type="submit" name="botao" class="btn" value="salario">Cadastrar Salario</button>
+    <button type="submit" name="botao" class="btn" value="gasto">Cadastrar Gasto</button>
+
     </form>
-<!--tabelas totais(por divida nome, por mes)-->
     <table border=1>
-        <tr><th>TOTAL DIVIDAS POR MES</th></tr>
-        <tr><th>
-            
-        </th></tr>
-        <tr>{%for mes, total in gastos_somados_mes%}
+        <tr><th>QUANTO GUARDAR CADA MÊS 30%</th></tr>
+        <tr>
+            {% for mes, salario in campo_nome_mes_salario%}
             <tr><th>{{mes}}</th>
-            <td>{{total}}</td>
+            <td>{{salario * 0.3}}</td>
             </tr>
-            {%endfor%}
+            {% endfor %}
         </tr>
     </table>
 
-    <table border=1>
+    <table>
+            <table border=1>
         <tr><th> TOTAL DIVIDAS POR NOME DIVIDA</th></tr>
          <tr><!--CRIA UMA LINHA NA TABELA-->
             {% for nome_gasto, total in gastos_somados_nome_gasto%}
@@ -36,16 +35,29 @@
         </tr>
     </table>
 
-<!--tabela de economia-->
+
     <table border=1>
-        <tr><th>QUANTO GUARDAR CADA MÊS 30%</th></tr>
         <tr>
+            <th>VALOR SALARIO</th>
             {% for mes, salario in campo_nome_mes_salario%}
             <tr><th>{{mes}}</th>
-            <td>{{salario * 0.3}}</td>
+            <td>{{salario}}</td>
             </tr>
             {% endfor %}
         </tr>
+        </table>
+
+
+        
+        <table border=1>
+            <tr><th>TOTAL DIVIDAS POR MES</th></tr>
+            </th></tr>
+            <tr>{%for mes, total in gastos_somados_mes%}
+                <tr><th>{{mes}}</th>
+                <td>{{total}}</td>
+                </tr>
+                {%endfor%}
+            </tr>
     </table>
 </body>
 </html>
