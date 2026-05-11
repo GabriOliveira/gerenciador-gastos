@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <title>Gerenciador de Gastos</title>
 </head>
 <body>
@@ -13,6 +15,7 @@
     </form>
     <table border=1>
         <tr><th>QUANTO GUARDAR CADA MÊS 30%</th></tr>
+        <tr><th>MES</th> <th>VALOR</th></tr>
         <tr>
             {% for mes, salario in campo_nome_mes_salario%}
             <tr><th>{{mes}}</th>
@@ -25,6 +28,7 @@
     <table>
             <table border=1>
         <tr><th> TOTAL DIVIDAS POR NOME DIVIDA</th></tr>
+        <tr><th>NOME</th> <th>VALOR</th></tr>
          <tr><!--CRIA UMA LINHA NA TABELA-->
             {% for nome_gasto, total in gastos_somados_nome_gasto%}
                 <tr><th>{{nome_gasto}}</th>
@@ -36,14 +40,14 @@
 
 
     <table border=1>
-        <tr>
-            <th>VALOR SALARIO</th>
+        <tr><th>VALOR SALARIO</th></tr>
+        <tr><th>NOME</th> <th>VALOR</th></tr>
+            <tr>
             {% for mes, salario in campo_nome_mes_salario%}
             <tr><th>{{mes}}</th>
-            <td>{{salario}}</td>
+            <td>{{salario}}</td></tr>
             </tr>
             {% endfor %}
-        </tr>
         </table>
 
 
@@ -51,6 +55,7 @@
         <table border=1>
             <tr><th>TOTAL DIVIDAS POR MES</th></tr>
             </th></tr>
+            <tr><th>MES</th> <th>TOTAL</th></tr>
             <tr>{%for mes, total in gastos_somados_mes%}
                 <tr><th>{{mes}}</th>
                 <td>{{total}}</td>

@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+ 
     <title>Cadastrar gasto</title>
 </head>
 <body>
     <h1>Cadastrar gasto</h1>
     <form action="/cadastro-gasto" method="post">
-        <input type="text" name="nome_gasto" class="ipt" placeholder="Nome do Gasto">
-        <input type="text" name="valor_gasto" class="ipt" placeholder="Valor do Gasto">
-    <select name="nome_mes_gasto" id="meses">
+        <div class="form-floating mb-3">
+            <input type="text" name="nome_gasto"  class="form-control" id="floatingInput">
+            <label for="floatingInput">Nome do Gasto</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" name="valor_gasto"  class="form-control" id="floatingInput">
+            <label for="floatingInput">Valor do Gasto</label>
+        </div>
+    <select name="nome_mes_gasto" class="form-select" aria-label="Default select example">
             <option value="Janeiro">Janeiro</option>
             <option value="Fevereiro">Fevereiro</option>
             <option value="Março">Março</option>
@@ -25,15 +34,16 @@
             <option value="Dezembro">Dezembro</option>
         </select>        
         <button type="submit" class="btn">Enviar Gasto do mes</button>
-        
+    </form>
 
-    </form>
     <form action="/deletar-gasto" method="post">
-        <button type="submit" name="botao" value="deletartodos">Deletar todos</button>
-        <input type="text" name="nome_gasto_deletar" class="ipt" placeholder="Deletar gasto">
-        <button type="submit" name="botao" value="deletarum">Deletar um</button>
+        <div class="form-floating mb-3">
+            <input type="text" name="nome_gasto_deletar" class="form-control" id="floatingInput">
+            <label for="floatingInput">Deletar gasto</label>
+            <button type="submit" name="botao" value="deletarum">Deletar um</button>
+            <button type="submit" name="botao" value="deletartodos">Deletar todos</button>
+        </div>
     </form>
-    
         <button type="button" onclick="window.location.href='/'">Voltar</button>
 
 </body>
