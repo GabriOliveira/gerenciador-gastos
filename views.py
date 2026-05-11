@@ -1,7 +1,7 @@
 import sqlite3 as sql
 from main import app
 from models import *
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, abort
 
 @app.route("/", methods=["GET", "POST"]) 
 def homepage():
@@ -43,14 +43,15 @@ def cadastrosalario():
     if not salario or salario.strip() == "":
          cursor.close()
          conn.close()
-         return render_template("erro.html")
+         return abort(401)
+
     
     try:
         salario = float(salario)
     except ValueError:
         cursor.close()
         conn.close()
-        return render_template("erro.html")
+        return abort(401)
         
     
     cursor.execute(
@@ -61,7 +62,7 @@ def cadastrosalario():
     conn.commit()
     cursor.close()
     conn.close()
-    return render_template("home.html")
+    return redirect(url_for("homepage"))
 
 @app.route("/cadastro-gasto", methods=['POST']) 
 def cadastrogastos():
@@ -112,16 +113,16 @@ def deletargasto():
         return redirect(url_for('homepage'))
 
     elif botao == "deletarum":
-        nome_gasto = request.form['nome_gasto']
+        nome_gasto = request.form['nome_gasto_deletar']
         if nome_gasto:
             cursor.execute("DELETE FROM Gasto WHERE nome_gasto = ?", (nome_gasto,))
             conn.commit()
-        return redirect(url_for('homepage'))
+            cursor.close()
+            conn.close()
+            return redirect(url_for('homepage'))
     else:
-        return render_template("erro.html")
-    cursor.close()
-    conn.close()
-
+         return abort(401)
+    
 
 # arrumar telas, atualizar views de cada tela, corrigir erro que nao atualiza a tabela, apenas atualiza após apertar o botão(fzr um form universal, onde cada tela tem ele com value diferente, e depnedendo do value ele executa um case q vai conter o codigo de sql para ver a tabela, switch = match)
 
